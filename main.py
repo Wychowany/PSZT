@@ -17,11 +17,13 @@ class Main:
     turtleWrapper = None
     warehouse = None
     screen = None
+    current_position = None
 
     def __init__(self):
         self.turtleWrapper = turtleWrap.TurtleWrapper()
         self.warehouse = warehouse.Warehouse()
         self.screen = turtle.Screen()
+        self.current_position = Point(round(self.warehouse.WIDTH/2), round(self.warehouse.HEIGHT/2))
         self.init_screen()
 
     def init_screen(self):
@@ -30,16 +32,25 @@ class Main:
         self.screen.title("Algorytm ewolucyjny")
 
     def up_pressed(self):
-        self.turtleWrapper.move_up()
+        if not self.turtleWrapper.drawing_finished and self.turtleWrapper.move_up():
+            self.warehouse.set_way_on_matrix_when_moving_up()
 
     def down_pressed(self):
-        self.turtleWrapper.move_down()
+        if not self.turtleWrapper.drawing_finished and self.turtleWrapper.move_down():
+            self.warehouse.set_way_on_matrix_when_moving_down()
 
     def left_pressed(self):
-        self.turtleWrapper.move_left()
+        if not self.turtleWrapper.drawing_finished and self.turtleWrapper.move_left():
+            self.warehouse.set_way_on_matrix_when_moving_left()
 
     def right_pressed(self):
-        self.turtleWrapper.move_right()
+        if not self.turtleWrapper.drawing_finished and self.turtleWrapper.move_right():
+            self.warehouse.set_way_on_matrix_when_moving_right()
+
+    def start_drawing(self):
+        if self.turtleWrapper.drawing_finished:
+            # draw_enterance(self)
+            print("Implementacja rysownia magazynu")
 
     def start(self):
         self.screen.onkey(self.exit_program, "q")
@@ -47,6 +58,7 @@ class Main:
         self.screen.onkey(self.down_pressed, "Down")
         self.screen.onkey(self.left_pressed, "Left")
         self.screen.onkey(self.right_pressed, "Right")
+        self.screen.onkey(self.start_drawing, "k")
         self.screen.listen()
         self.screen.mainloop()
 

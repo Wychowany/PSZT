@@ -2,7 +2,6 @@ import turtle
 import warehouse
 
 class TurtleWrapper:
-
     tut = None
     previous_key = None
     starting_position = None  # Wspolrzedne
