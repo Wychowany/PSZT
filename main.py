@@ -49,8 +49,14 @@ class Main:
 
     def start_drawing(self):
         if self.turtleWrapper.drawing_finished:
-            # draw_enterance(self)
+            self.warehouse.fill_warehouse()
             print("Implementacja rysownia magazynu")
+            # draw_enterance(self)
+        # for x in range(100):
+        #     for y in range(100):
+        #         print(str(self.warehouse.matrix[x][y]) + " ", end='')
+        #
+        #     print('')
 
     def start(self):
         self.screen.onkey(self.exit_program, "q")

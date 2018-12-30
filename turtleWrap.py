@@ -1,6 +1,7 @@
 import turtle
 import warehouse
 
+
 class TurtleWrapper:
     tut = None
     previous_key = None
@@ -14,14 +15,10 @@ class TurtleWrapper:
         self.tut.speed(0)  # prevents delays
         self.starting_position = self.tut.pos()
         self.current_position = Point(warehouse.Warehouse.WIDTH/2, warehouse.Warehouse.HEIGHT/2)
-        print(self.starting_position)
-        print(str(self.current_position.x) + " " + str(self.current_position.y))
-        print(self.tut.pos()[0])
 
     def move_forward(self):
         if self.drawing_finished is False:
             self.tut.forward(50)
-            print(self.get_current_position())
             if self.get_current_position() in self.possible_finish_coordinates:
                 print("KONIEC RYSOWANIA")
                 self.drawing_finished = True
