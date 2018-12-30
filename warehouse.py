@@ -9,6 +9,7 @@ class Warehouse:
     entrance = None
     index_x = 50
     index_y = 50
+    first = True
 
     def __init__(self):
         self.matrix = [[0 for x in range(self.WIDTH)] for y in range(self.HEIGHT)]
@@ -23,21 +24,39 @@ class Warehouse:
         for i in range(5):
             self.matrix[self.index_x - i][self.index_y] = State.State.WALL
 
+        if self.first is True:
+            self.matrix[self.index_x][self.index_y] = State.State.ENTRANCE
+            self.first = False
         self.index_x -= 5
 
     def set_way_on_matrix_when_moving_down(self):
         for i in range(5):
             self.matrix[self.index_x + i][self.index_y] = State.State.WALL
+
+        if self.first is True:
+            self.matrix[self.index_x][self.index_y] = State.State.ENTRANCE
+            self.first = False
+
         self.index_x += 5
 
     def set_way_on_matrix_when_moving_left(self):
         for i in range(5):
             self.matrix[self.index_x][self.index_y - i] = State.State.WALL
+
+            if self.first is True:
+                self.matrix[self.index_x][self.index_y] = State.State.ENTRANCE
+                self.first = False
+
         self.index_y -= 5
 
     def set_way_on_matrix_when_moving_right(self):
         for i in range(5):
             self.matrix[self.index_x][self.index_y + i] = State.State.WALL
+
+        if self.first is True:
+            self.matrix[self.index_x][self.index_y] = State.State.ENTRANCE
+            self.first = False
+
         self.index_y += 5
 
     def fill_warehouse(self):
@@ -46,7 +65,7 @@ class Warehouse:
 
     def fill_field(self, x, y):
         if x > 99 or y > 99 or x < 0 or y < 0 or self.matrix[x][y] == State.State.WALL \
-                or self.matrix[x][y] == State.State.FREE_SPACE:
+                or self.matrix[x][y] == State.State.FREE_SPACE or self.matrix[x][y] == State.State.ENTRANCE:
             return
         elif self.matrix[x][y] == State.State.OUT_OF_BOUNDS:
             self.matrix[x][y] = State.State.FREE_SPACE
@@ -55,8 +74,6 @@ class Warehouse:
         self.fill_field(x, y+1)
         self.fill_field(x+1, y)
         self.fill_field(x, y-1)
-
-
 
     def debug_warehouse_shape(self):
         counter = 0
