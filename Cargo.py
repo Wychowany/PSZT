@@ -1,35 +1,36 @@
 
 
-class SmallSquare:
-    width = 10
-    height = 10
+
+class SmallSquare():
+    width = 1
+    height = 1
 
 
-class SmallRectangleVertical:
-    width = 10
-    height = 20
+class SmallRectangleVertical():
+    width = 1
+    height = 2
 
 
-class SmallRectangleHorizontal:
-    width = 20
-    height = 10
+class SmallRectangleHorizontal():
+    width = 2
+    height = 1
 
 
-class MediumSquare:
-    width = 20
-    height = 20
+class MediumSquare():
+    width = 2
+    height = 2
 
 
-class MediumRectangleVertical:
-    width = 20
-    height = 30
+class MediumRectangleVertical():
+    width = 2
+    height = 3
 
 
-class MediumRectangleHorizontal:
-    width = 30
-    height = 20
+class MediumRectangleHorizontal():
+    width = 3
+    height = 2
 
 
-class BigSquare:
-    width = 50
-    height = 50
+class BigSquare():
+    width = 5
+    height = 5
