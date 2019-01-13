@@ -22,7 +22,7 @@ class Main:
     screen = None
     current_position = None
     data_sample = None #tablica populacji
-    input_vetor = None
+    input_vetor = []
 
     def __init__(self):
         self.turtleWrapper = turtleWrap.TurtleWrapper()
@@ -58,8 +58,10 @@ class Main:
         if self.turtleWrapper.drawing_finished:
             self.warehouse.fill_warehouse()
             self.data_sample = [Population.Population(self.input_vetor, self.warehouse.matrix) for i in range(100)]
-            #for population in self.data_sample:
-            #    population.putputCargosIntoWarehouse()
+
+            #^^^ do tego momentu dziala
+            for population in self.data_sample:
+                population.putCargosIntoWarehouse()
 
     #takie tam wczytywanie towarow, nie wiazace    
     def getInput(self):
@@ -67,49 +69,49 @@ class Main:
         print("Input amount of cargos (truncated at 100)")
         
         user_input = input("Number of small squares:")
-        for i in int(user_input)
+        for i in range(int(user_input)):
             if counter >= 100:
                 break
             self.input_vetor.append(1)
             counter = counter+1
 
-        user_input = input("Number of horizontal small rectangles:")
-        for i in int(user_input)
+        user_input = input("Number of vertical small rectangles:")
+        for i in range(int(user_input)):
             if counter >= 100:
                 break
             self.input_vetor.append(2)
             counter = counter+1
 
-        user_input = input("Number of vertical small rectangles:")
-        for i in int(user_input)
+        user_input = input("Number of horizontal small rectangles:")
+        for i in range(int(user_input)):
             if counter >= 100:
                 break
             self.input_vetor.append(3)
             counter = counter+1
 
         user_input = input("Number of medium squares:")
-        for i in int(user_input)
+        for i in range(int(user_input)):
             if counter >= 100:
                 break
             self.input_vetor.append(4)
             counter = counter+1
 
-        user_input = input("Number of horizontal medium rectangles:")
-        for i in int(user_input)
+        user_input = input("Number of vertical medium rectangles:")
+        for i in range(int(user_input)):
             if counter >= 100:
                 break
             self.input_vetor.append(5)
             counter = counter+1
 
-        user_input = input("Number of vertical medium rectangles:")
-        for i in int(user_input)
+        user_input = input("Number of horizontal medium rectangles:")
+        for i in range(int(user_input)):
             if counter >= 100:
                 break
             self.input_vetor.append(6)
             counter = counter+1
 
         user_input = input("Number of big squares:")
-        for i in int(user_input)
+        for i in range(int(user_input)):
             if counter >= 100:
                 break
             self.input_vetor.append(7)
@@ -119,7 +121,7 @@ class Main:
             self.input_vetor.append(1)
             counter = counter+1
 
-    #powinno byc ok
+    #powinno byc ok, nie sprawdzane, bo nie dziala wpisywanie towarow
     def reproduce(self):
         for population in self.data_sample:
             population.evaluateObjectiveFunction(self.warehouse.height, self.warehouse.width)
@@ -127,10 +129,10 @@ class Main:
         self.sort()
 
         for i in range(50):
-            a = random(0, 50, 1)
-            b = random(0, 50, 1)
+            a = random.random(0, 50, 1)
+            b = random.random(0, 50, 1)
             while a == b:
-                b = random(0, 50, 1)
+                b = random.random(0, 50, 1)
             
             for j in range(50):
                 self.data_sample.append(self.crossPopulations(self.data_sample[a], self.data_sample[b]))
@@ -138,7 +140,7 @@ class Main:
         for population in self.data_sample:
             for cargo in population.individuals:
                 cargo.mutate()
-                
+
             population.warehouse = self.warehouse.matrix
             population.putputCargosIntoWarehouse()
 
@@ -150,21 +152,21 @@ class Main:
         for i in range(100):
             crossed_item = Individual.Individual(0)
 
-            crossed_item.Cargo = mother[i].Cargo
+            crossed_item.cargo = mother[i].cargo
 
-            a = choice("mother","father")
+            a = choice(["mother","father"])
             if a == "mother":
                 crossed_item.topLeftCorner_X = mother[i].topLeftCorner_X
             else:
                 crossed_item.topLeftCorner_X = father[i].topLeftCorner_X
                 
-            a = choice("mother","father")
+            a = choice(["mother","father"])
             if a == "mother":
                 crossed_item.topLeftCorner_Y = mother[i].topLeftCorner_Y
             else:
                 crossed_item.topLeftCorner_Y = father[i].topLeftCorner_Y
 
-            a = choice("mother","father")
+            a = choice(["mother","father"])
             if a == "mother":
                 crossed_item.isVisible = mother[i].isVisible
             else:
@@ -220,5 +222,5 @@ class Main:
 
 ################# PROGRAM ###################
 program = Main()
-#pogram.getInput()
+program.getInput()
 program.start()

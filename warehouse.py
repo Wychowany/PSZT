@@ -83,11 +83,10 @@ class Warehouse:
             
             for y in range(self.WIDTH):
                 if self.matrix[x][y] == -1 or self.matrix[x][y] == -2:
-                    if isAllowedToPaint == True:
-                        if not (self.matrix[x][y-1] == -1 or self.matrix[x][y-1] == -2):
-                            isAllowedToPaint = False
-                        else:
-                            isAllowedToPaint = True
+                    if self.matrix[x][y-1] == -1 or self.matrix[x][y-1] == -2 or self.matrix[x][y-1] == 0:
+                        isAllowedToPaint = True
+                    else:
+                        isAllowedToPaint = False
 
                 elif isAllowedToPaint == True: 
                     self.matrix[x][y] = -3
