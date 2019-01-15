@@ -216,6 +216,11 @@ class Main:
         #self.screen.mainloop() odrzucało mi to w necie znalazlem ze ma byc tak jak na dole
         turtle.mainloop()
 
+    def start_test_rysowania_cargo(self):
+        self.turtleWrapper.drawCargo(0, 0, 50, 100)
+        self.turtleWrapper.drawCargo(200, -200, 200, 100)
+        self.screen.exitonclick()
+
     def exit_program(self):
         self.screen.bye()
 
@@ -224,3 +229,4 @@ class Main:
 program = Main()
 program.getInput()
 program.start()
+#program.start_test_rysowania_cargo() #należy wykomentować tylko program.start()
