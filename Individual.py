@@ -30,6 +30,7 @@ class Individual:
         elif x == 7:
             cargo = Cargo.Cargo(5,5)
 
+
     #nie dziala
     #szkielet, mozna zmienic koncepcje, trzeba poprawic zeby nie wykraczac poza zakres, lub zmienic ladunek tak zeby nie mogl wykraczac poza zakres              
     def registerCargo(self, warehouse):
@@ -87,12 +88,11 @@ class Individual:
                 return left
         return False
 
-    def isFullyInBounds(self,matrix,height,width):
-        for i in range(topLeftCorner_Y, topLeftCorner_Y + cargo.height):
-            for j in range(topLeftCorner_X, topLeftCorner_X + cargo.width):
+    def isFullyInBounds(self, matrix, height,width):
+        for i in range(self.topLeftCorner_Y, self.topLeftCorner_Y + self.cargo.height):
+            for j in range(self.topLeftCorner_X, self.topLeftCorner_X + self.cargo.width):
                 if matrix[i][j] < 0:
                     return False
-
         return True
 
     def mutate(self):

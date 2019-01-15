@@ -18,7 +18,7 @@ class Warehouse:
     def init_matrix(self):
         for j in range(self.WIDTH):
             for i in range(self.HEIGHT):
-                self.matrix[i][j] = 0
+                self.matrix[i][j] = -3
 
     def set_way_on_matrix_when_moving_up(self):
         for i in range(5):
@@ -61,42 +61,34 @@ class Warehouse:
 
     def fill_warehouse(self):
         #self.fill_field(49, 50)  hardcoded, wystarczy podac jakis punkt wewnatrz magazynu
-        self.fillField()
+        self.fill_field(49, 50)
         self.debug_warehouse_shape()
 
     #zrobilem iteracyjnie, wydaje sie bardziej przejrzyste
-    #def fill_field(self, x, y):
-    #    if x > 99 or y > 99 or x < 0 or y < 0 or self.matrix[x][y] == State.State.WALL \
-    #            or self.matrix[x][y] == State.State.FREE_SPACE or self.matrix[x][y] == State.State.ENTRANCE:
-    #        return
-    #    elif self.matrix[x][y] == State.State.OUT_OF_BOUNDS:
-    #        self.matrix[x][y] = State.State.FREE_SPACE
+    def fill_field(self, x, y):
+       if x > 99 or y > 99 or x < 0 or y < 0 or self.matrix[x][y] == -2 \
+               or self.matrix[x][y] == 0 or self.matrix[x][y] == -1:
+           return
+       elif self.matrix[x][y] == -3:
+           self.matrix[x][y] = 0
 
-    #    self.fill_field(x-1, y)
-    #    self.fill_field(x, y+1)
-    #    self.fill_field(x+1, y)
-    #    self.fill_field(x, y-1)
+       self.fill_field(x-1, y)
+       self.fill_field(x, y+1)
+       self.fill_field(x+1, y)
+       self.fill_field(x, y-1)
 
-    def fillField(self):
-        for x in range(self.HEIGHT):
-            isAllowedToPaint = True
-            
-            for y in range(self.WIDTH):
-                if self.matrix[x][y] == -1 or self.matrix[x][y] == -2:
-                    if self.matrix[x][y-1] == -1 or self.matrix[x][y-1] == -2 or self.matrix[x][y-1] == 0:
-                        isAllowedToPaint = True
-                    else:
-                        isAllowedToPaint = False
 
-                elif isAllowedToPaint == True: 
-                    self.matrix[x][y] = -3
-                    
+
     def debug_warehouse_shape(self):
-        counter = []
-        
+        counter = 0
         for x in range(self.HEIGHT):
-            counter = []
-            for y in range(self.WIDTH):
-                counter.append(self.matrix[x][y])
-
-            print(counter)
+            y = 0
+            while y < self.WIDTH:
+                if self.matrix[x][y] == 0:
+                    counter += 1
+                    print("x", end='')
+                else:
+                    print(" ", end='')
+                y += 1
+            print("")
+        print(counter)
