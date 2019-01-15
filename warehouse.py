@@ -86,9 +86,9 @@ class Warehouse:
             while y < self.WIDTH:
                 if self.matrix[x][y] == 0:
                     counter += 1
-                    print("x", end='')
+                    print("x", end=" ")
                 else:
-                    print(" ", end='')
+                    print(" ", end=" ")
                 y += 1
             print("")
         print(counter)

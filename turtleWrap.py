@@ -86,6 +86,19 @@ class TurtleWrapper:
     def get_current_position(self):
         return [int(round(self.tut.pos()[0])), int(round(self.tut.pos()[1]))]
 
+    def drawCargo(self, x_corner, y_corner, width, height):
+        self.tut.penup()
+        self.tut.goto(x_corner, y_corner)
+        self.turn_east()
+        self.tut.pendown()
+        self.tut.forward(width)
+        self.turn_south()
+        self.tut.forward(height)
+        self.turn_west()
+        self.tut.forward(width)
+        self.turn_north()
+        self.tut.forward(height)
+
 
 class Point:
     x = None
