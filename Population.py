@@ -12,8 +12,8 @@ class Population:
     def __init__(self, x, matrix):
         #super().__init__()
         self.individuals = [Individual.Individual(x[i]) for i in range(100)]
-        objectiveFunctionValue = 0
-        warehouse = matrix
+        self.objectiveFunctionValue = 0
+        self.warehouse = matrix
 
     '''
         Objective function defines how little of warehouse's space is free
@@ -37,7 +37,5 @@ class Population:
                 objectiveFunctionValue += 50
 
     def putCargosIntoWarehouse(self):
-        '''
         for item in self.individuals:
-            item.registerCargo(self.warehouse) <--- nie dziala
-        '''
+            item.registerCargo(self.warehouse)

@@ -63,8 +63,8 @@ class Warehouse:
         #self.fill_field(49, 50)  hardcoded, wystarczy podac jakis punkt wewnatrz magazynu
         self.fill_field(49, 50)
         self.debug_warehouse_shape()
+        #self.debug()
 
-    #zrobilem iteracyjnie, wydaje sie bardziej przejrzyste
     def fill_field(self, x, y):
        if x > 99 or y > 99 or x < 0 or y < 0 or self.matrix[x][y] == -2 \
                or self.matrix[x][y] == 0 or self.matrix[x][y] == -1:
@@ -76,8 +76,6 @@ class Warehouse:
        self.fill_field(x, y+1)
        self.fill_field(x+1, y)
        self.fill_field(x, y-1)
-
-
 
     def debug_warehouse_shape(self):
         counter = 0

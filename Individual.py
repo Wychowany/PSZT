@@ -8,27 +8,27 @@ class Individual:
     topLeftCorner_X = None
     topLeftCorner_Y = None
     isVisible = None
-    cargo = Cargo.Cargo(0,0)
+    cargo = None
 
     def __init__(self,x):
         #super().__init__()
-        isVisible = random.choice([True, False])
-        topLeftCorner_X = random.randrange(0, 100, 1)
-        topLeftCorner_Y = random.randrange(0, 100, 1)
+        self.isVisible = random.choice([True, False])
+        self.topLeftCorner_X = random.randrange(0, 100, 1)
+        self.topLeftCorner_Y = random.randrange(0, 100, 1)
         if x == 1:
-            cargo = Cargo.Cargo(1,1)
+            self.cargo = Cargo.Cargo(1,1)
         elif x == 2:
-            cargo = Cargo.Cargo(1,2)
+            self.cargo = Cargo.Cargo(1,2)
         elif x == 3:
-            cargo = Cargo.Cargo(2,1)
+            self.cargo = Cargo.Cargo(2,1)
         elif x == 4:
-            cargo = Cargo.Cargo(2,2)
+            self.cargo = Cargo.Cargo(2,2)
         elif x == 5:
-            cargo = Cargo.Cargo(2,3)
+            self.cargo = Cargo.Cargo(2,3)
         elif x == 6:
-            cargo = Cargo.Cargo(3,2)
+            self.cargo = Cargo.Cargo(3,2)
         elif x == 7:
-            cargo = Cargo.Cargo(5,5)
+            self.cargo = Cargo.Cargo(5,5)
 
 
     #nie dziala
@@ -47,23 +47,23 @@ class Individual:
         result = False
         
         for i in range(self.topLeftCorner_X, self.topLeftCorner_X + self.cargo.width, 1):
-            result = self.findPath(self, matrix, i, self.topLeftCorner_Y)
+            result = self.findPath(matrix, self.topLeftCorner_Y, i)
             if result == True:
                 return True
 
             if self.cargo.height > 1:
-                result = self.findPath(self, matrix, i, self.topLeftCorner_Y + self.cargo.height -1)
+                result = self.findPath(matrix, self.topLeftCorner_Y + self.cargo.height -1, i)
                 if result == True:
                     return True
         
         if self.cargo.height > 1:
             for i in range(self.topLeftCorner_Y, self.topLeftCorner_Y + self.cargo.height, 1):
-                result = self.findPath(self, matrix, self.topLeftCorner_X, i)
+                result = self.findPath(matrix, i, self.topLeftCorner_X)
                 if result == True:
                     return True
 
                 if self.cargo.width > 1:
-                    result = self.findPath(self, matrix, self.topLeftCorner_X + self.cargo.width - 1, i)
+                    result = self.findPath(matrix, i, self.topLeftCorner_X + self.cargo.width - 1)
                     if result == True:
                         return True
 
