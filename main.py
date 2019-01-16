@@ -4,6 +4,8 @@ import turtle
 import turtleWrap
 import warehouse
 import Population
+import Individual
+import random
 
 
 class Point:
@@ -22,7 +24,7 @@ class Main:
     screen = None
     current_position = None
     data_sample = None #tablica populacji
-    input_vetor = []
+    input_vector = None
 
     def __init__(self):
         self.turtleWrapper = turtleWrap.TurtleWrapper()
@@ -30,7 +32,7 @@ class Main:
         self.screen = turtle.Screen()
         self.current_position = Point(round(self.warehouse.WIDTH/2), round(self.warehouse.HEIGHT/2))
         self.init_screen()
-        input_vector = []
+        self.input_vector = []
 
     def init_screen(self):
         self.screen = turtle.Screen()
@@ -57,7 +59,7 @@ class Main:
     def finish_drawing(self):
         if self.turtleWrapper.drawing_finished:
             self.warehouse.fill_warehouse()
-            self.data_sample = [Population.Population(self.input_vetor, self.warehouse.matrix) for i in range(100)]
+            self.data_sample = [Population.Population(self.input_vector, self.warehouse.matrix) for i in range(100)]
 
             #^^^ do tego momentu dziala
             for population in self.data_sample:
@@ -65,66 +67,21 @@ class Main:
 
     #takie tam wczytywanie towarow, nie wiazace    
     def getInput(self):
-        counter = 0
-        print("Input amount of cargos (truncated at 100)")
-        
-        user_input = input("Number of small squares:")
-        for i in range(int(user_input)):
-            if counter >= 100:
-                break
-            self.input_vetor.append(1)
-            counter = counter+1
+        for i in range(20):
+            self.input_vector.append(1)
+            self.input_vector.append(4)
+            self.input_vector.append(7)
 
-        user_input = input("Number of vertical small rectangles:")
-        for i in range(int(user_input)):
-            if counter >= 100:
-                break
-            self.input_vetor.append(2)
-            counter = counter+1
-
-        user_input = input("Number of horizontal small rectangles:")
-        for i in range(int(user_input)):
-            if counter >= 100:
-                break
-            self.input_vetor.append(3)
-            counter = counter+1
-
-        user_input = input("Number of medium squares:")
-        for i in range(int(user_input)):
-            if counter >= 100:
-                break
-            self.input_vetor.append(4)
-            counter = counter+1
-
-        user_input = input("Number of vertical medium rectangles:")
-        for i in range(int(user_input)):
-            if counter >= 100:
-                break
-            self.input_vetor.append(5)
-            counter = counter+1
-
-        user_input = input("Number of horizontal medium rectangles:")
-        for i in range(int(user_input)):
-            if counter >= 100:
-                break
-            self.input_vetor.append(6)
-            counter = counter+1
-
-        user_input = input("Number of big squares:")
-        for i in range(int(user_input)):
-            if counter >= 100:
-                break
-            self.input_vetor.append(7)
-            counter = counter+1
-        
-        while counter < 100:
-            self.input_vetor.append(1)
-            counter = counter+1
+        for i in range(10):
+            self.input_vector.append(2)
+            self.input_vector.append(3)
+            self.input_vector.append(5)
+            self.input_vector.append(6)
 
     #powinno byc ok, nie sprawdzane, bo nie dziala wpisywanie towarow
     def reproduce(self):
         for population in self.data_sample:
-            population.evaluateObjectiveFunction(self.warehouse.height, self.warehouse.width)
+            population.evaluateObjectiveFunction(self.warehouse.HEIGHT, self.warehouse.WIDTH)
 
         self.sort()
 
@@ -147,32 +104,36 @@ class Main:
         
 
     def crossPopulations(self, mother, father):
-        x = []
-        child = Population.Population(x)
+        x = [i for i in range(100)]
+        child = Population.Population(x,self.warehouse.matrix)
+        
+        for k in range(100):
+            child.individuals.pop(0)
+
         for i in range(100):
             crossed_item = Individual.Individual(0)
 
             crossed_item.cargo = mother[i].cargo
 
-            a = choice(["mother","father"])
+            a = random.choice(["mother","father"])
             if a == "mother":
                 crossed_item.topLeftCorner_X = mother[i].topLeftCorner_X
             else:
                 crossed_item.topLeftCorner_X = father[i].topLeftCorner_X
                 
-            a = choice(["mother","father"])
+            a = random.choice(["mother","father"])
             if a == "mother":
                 crossed_item.topLeftCorner_Y = mother[i].topLeftCorner_Y
             else:
                 crossed_item.topLeftCorner_Y = father[i].topLeftCorner_Y
 
-            a = choice(["mother","father"])
+            a = random.choice(["mother","father"])
             if a == "mother":
                 crossed_item.isVisible = mother[i].isVisible
             else:
                 crossed_item.isVisible = father[i].isVisible
 
-            child.append(crossed_item)
+            child.individuals.append(crossed_item)
         
         return child
 
@@ -192,8 +153,8 @@ class Main:
         # 50 best populations
         for i in range(50):
             key = value_map[self.keyWithMinValue(value_map)]
-            new_sample.append(key)
-            new_sample.pop(key)
+            new_sample.append(self.data_sample[key])
+            self.data_sample.pop(key)
         
         self.data_sample = new_sample
 
@@ -213,7 +174,7 @@ class Main:
         self.screen.onkey(self.finish_drawing, "k")
         #self.screen.onkey(self.reproduce, "space")
         self.screen.listen()
-        #self.screen.mainloop() odrzucało mi to w necie znalazlem ze ma byc tak jak na dole
+        #self.screen.mainloop() #odrzucało mi to w necie znalazlem ze ma byc tak jak na dole
         turtle.mainloop()
 
     def start_test_rysowania_cargo(self):
