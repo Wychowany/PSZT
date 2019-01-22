@@ -34,9 +34,9 @@ class Individual:
     #nie dziala
     #szkielet, mozna zmienic koncepcje, trzeba poprawic zeby nie wykraczac poza zakres, lub zmienic ladunek tak zeby nie mogl wykraczac poza zakres              
     def registerCargo(self, warehouse):
-        for i in range(self.topLeftCorner_Y,self.topLeftCorner_Y + self.cargo.height):
+        for i in range(self.topLeftCorner_Y, self.topLeftCorner_Y + self.cargo.height):
             for j in range(self.topLeftCorner_X,self.topLeftCorner_X + self.cargo.width):
-                if i >= 0 and i <= 101 and j >= 0 and j <= 101:
+                if i >= 0 and i <= 100 and j >= 0 and j <= 100:
                     if warehouse[i][j] <= -3:
                         warehouse[i][j] = warehouse[i][j] - 1
                     elif warehouse[i][j] >= 0:
@@ -71,28 +71,29 @@ class Individual:
         if matrix[x][y] == -1:
             return True
         elif matrix[x-1][y] == 0:
-            top = self.findPath(matrix,x-1,y)
+            top = self.findPath(matrix, x-1, y)
             if top == True:
                 return top
         elif matrix[x][y+1] == 0:
-            right = self.findPath(matrix,x,y+1)
+            right = self.findPath(matrix, x, y+1)
             if right == True:
                 return right
         elif matrix[x+1][y] == 0:
-            down = self.findPath(matrix,x+1,y)
+            down = self.findPath(matrix, x+1, y)
             if down == True:
                 return down
         elif matrix[x][y-1] == 0:
-            left = self.findPath(matrix,x,y-1)
+            left = self.findPath(matrix, x, y-1)
             if left == True:
                 return left
         return False
 
-    def isFullyInBounds(self, matrix, height,width):
+    def isFullyInBounds(self, matrix, height, width):
         for i in range(self.topLeftCorner_Y, self.topLeftCorner_Y + self.cargo.height):
             for j in range(self.topLeftCorner_X, self.topLeftCorner_X + self.cargo.width):
-                if matrix[i][j] < 0:
-                    return False
+                if i < height and j < width:
+                    if matrix[i][j] < 0:
+                        return False
         return True
 
     def mutate(self):

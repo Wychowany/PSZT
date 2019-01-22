@@ -85,6 +85,18 @@ class Warehouse:
                 if self.matrix[x][y] == 0:
                     counter += 1
                     print("x", end=" ")
+
+                elif self.matrix[x][y] >= 10:
+                    print("o", end=" ")
+                elif self.matrix[x][y] > 0:
+                    print(self.matrix[x][y], end=" ")
+
+                elif self.matrix[x][y] == -1:
+                    print("_", end=" ")
+                elif self.matrix[x][y] == -3:
+                    print("a", end=" ")
+                elif self.matrix[x][y] <= -4:
+                    print("b", end=" ")
                 else:
                     print(" ", end=" ")
                 y += 1

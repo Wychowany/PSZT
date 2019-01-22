@@ -6,7 +6,7 @@ import warehouse
 import Population
 import Individual
 import random
-
+import copy
 
 class Point:
     index_x = None
@@ -61,9 +61,41 @@ class Main:
             self.warehouse.fill_warehouse()
             self.data_sample = [Population.Population(self.input_vector, self.warehouse.matrix) for i in range(100)]
 
-            #^^^ do tego momentu dziala
             for population in self.data_sample:
                 population.putCargosIntoWarehouse()
+
+
+    def iteration(self):
+        for population in self.data_sample:
+            population.evaluateObjectiveFunction(self.warehouse.HEIGHT, self.warehouse.WIDTH)
+
+        self.sort()
+
+        for i in range(50):
+            a = random.randrange(0, 50, 1)
+            b = random.randrange(0, 50, 1)
+            while a == b:
+                b = random.randrange(0, 50, 1)
+
+            for j in range(50):
+                self.data_sample.append(self.crossPopulations(self.data_sample[a], self.data_sample[b]))
+
+        for population in self.data_sample:
+            for cargo in population.individuals:
+                cargo.mutate()
+
+            population.warehouse = copy.deepcopy(self.warehouse.matrix)
+            population.putCargosIntoWarehouse()
+
+        self.print_warehouse()
+
+
+
+    def print_warehouse(self):
+        self.data_sample[0].debug_warehouse_shape()
+        for i in range(100):
+            print(self.data_sample[i].objectiveFunctionValue)
+
 
     #takie tam wczytywanie towarow, nie wiazace    
     def getInput(self):
@@ -79,29 +111,7 @@ class Main:
             self.input_vector.append(6)
 
     #powinno byc ok, nie sprawdzane, bo nie dziala wpisywanie towarow
-    def reproduce(self):
-        for population in self.data_sample:
-            population.evaluateObjectiveFunction(self.warehouse.HEIGHT, self.warehouse.WIDTH)
-
-        self.sort()
-
-        for i in range(50):
-            a = random.random(0, 50, 1)
-            b = random.random(0, 50, 1)
-            while a == b:
-                b = random.random(0, 50, 1)
-            
-            for j in range(50):
-                self.data_sample.append(self.crossPopulations(self.data_sample[a], self.data_sample[b]))
-
-        for population in self.data_sample:
-            for cargo in population.individuals:
-                cargo.mutate()
-
-            population.warehouse = self.warehouse.matrix
-            population.putputCargosIntoWarehouse()
-
-        
+    #def reproduce(self):
 
     def crossPopulations(self, mother, father):
         x = [i for i in range(100)]
@@ -113,25 +123,25 @@ class Main:
         for i in range(100):
             crossed_item = Individual.Individual(0)
 
-            crossed_item.cargo = mother[i].cargo
+            crossed_item.cargo = mother.individuals[i].cargo
 
-            a = random.choice(["mother","father"])
+            a = random.choice(["mother", "father"])
             if a == "mother":
-                crossed_item.topLeftCorner_X = mother[i].topLeftCorner_X
+                crossed_item.topLeftCorner_X = mother.individuals[i].topLeftCorner_X
             else:
-                crossed_item.topLeftCorner_X = father[i].topLeftCorner_X
+                crossed_item.topLeftCorner_X = father.individuals[i].topLeftCorner_X
                 
-            a = random.choice(["mother","father"])
+            a = random.choice(["mother", "father"])
             if a == "mother":
-                crossed_item.topLeftCorner_Y = mother[i].topLeftCorner_Y
+                crossed_item.topLeftCorner_Y = mother.individuals[i].topLeftCorner_Y
             else:
-                crossed_item.topLeftCorner_Y = father[i].topLeftCorner_Y
+                crossed_item.topLeftCorner_Y = father.individuals[i].topLeftCorner_Y
 
-            a = random.choice(["mother","father"])
+            a = random.choice(["mother", "father"])
             if a == "mother":
-                crossed_item.isVisible = mother[i].isVisible
+                crossed_item.isVisible = mother.individuals[i].isVisible
             else:
-                crossed_item.isVisible = father[i].isVisible
+                crossed_item.isVisible = father.individuals[i].isVisible
 
             child.individuals.append(crossed_item)
         
@@ -160,7 +170,7 @@ class Main:
 
 
     #najszybsze wyszukiwanie maxa w mapie wg goscia ze stackoverflow, mial dowody
-    def keyWithMinValue(self,value_map):
+    def keyWithMinValue(self, value_map):
         v = list(value_map.values())
         k = list(value_map.keys())
         return k[v.index(min(v))]
@@ -172,6 +182,9 @@ class Main:
         self.screen.onkey(self.left_pressed, "Left")
         self.screen.onkey(self.right_pressed, "Right")
         self.screen.onkey(self.finish_drawing, "k")
+        self.screen.onkey(self.start_test_rysowania_cargo, "a")
+        self.screen.onkey(self.iteration, "i")
+        self.screen.onkey(self.print_warehouse, "w")
         #self.screen.onkey(self.reproduce, "space")
         self.screen.listen()
         #self.screen.mainloop() #odrzucało mi to w necie znalazlem ze ma byc tak jak na dole

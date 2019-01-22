@@ -1,6 +1,7 @@
 #!/usr/bin/bash
 # -*- coding: utf-8 -*
 import Individual
+import copy
 
 
 class Population:
@@ -13,7 +14,7 @@ class Population:
         #super().__init__()
         self.individuals = [Individual.Individual(x[i]) for i in range(100)]
         self.objectiveFunctionValue = 0
-        self.warehouse = matrix
+        self.warehouse = copy.deepcopy(matrix)
 
     '''
         Objective function defines how little of warehouse's space is free
@@ -25,17 +26,44 @@ class Population:
     '''
     def evaluateObjectiveFunction(self, height, width):
         objectiveFunctionValue = 0
+
         for y in range(width):
             for x in range(height):
-                objectiveFunctionValue += (self.warehouse[x][y] - 1) * 5 + 1
+                if self.warehouse[x][y] >= 0:
+                    objectiveFunctionValue += (self.warehouse[x][y] - 1) * 5 + 1
 
         for item in self.individuals:
-            if item.isFullyInBounds == False:
+            if item.isFullyInBounds(self.warehouse,height,width) == False:
                 objectiveFunctionValue += 20
 
-            if item.isThereAPath == False:
+            if item.isThereAPath(self.warehouse)== False:
                 objectiveFunctionValue += 50
 
     def putCargosIntoWarehouse(self):
         for item in self.individuals:
             item.registerCargo(self.warehouse)
+
+    def debug_warehouse_shape(self):
+        counter = 0
+        for x in range(101):
+            y = 0
+            while y < 101:
+                if self.warehouse[x][y] == 0:
+                    print("x", end=" ")
+
+                elif self.warehouse[x][y] >= 10:
+                    print("o", end=" ")
+                elif self.warehouse[x][y] > 0:
+                    print(self.warehouse[x][y], end=" ")
+
+                elif self.warehouse[x][y] == -1:
+                    print("_", end=" ")
+                elif self.warehouse[x][y] == -3:
+                    print("a", end=" ")
+                elif self.warehouse[x][y] <= -4:
+                    print("b", end=" ")
+                else:
+                    print(" ", end=" ")
+                y += 1
+            print("")
+        print(self.objectiveFunctionValue)
