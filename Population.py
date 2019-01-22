@@ -8,6 +8,9 @@ class Population:
     individuals = None
     objectiveFunctionValue = None
     warehouse = None
+    OVERLAPPING_PENALTY = 5
+    OUT_OF_BOUNDS_PENALTY = 20
+    NO_PATH_PENALTY = 50
 
     def __init__(self, x, matrix):
         #super().__init__()
@@ -18,7 +21,7 @@ class Population:
     '''
         Objective function defines how little of warehouse's space is free
         Base value: 0
-        Added value: 1 for every possision with an item
+        Added value: 1 for every possision without an item
         Penalty value: 5 for every overlaping item in given possition
         Penalty value: 20 if a item is not fully in the warehouse
         Penalty value: 50 if there is no path to the item
@@ -27,14 +30,17 @@ class Population:
         objectiveFunctionValue = 0
         for y in range(width):
             for x in range(height):
-                objectiveFunctionValue += (self.warehouse[x][y] - 1) * 5 + 1
+                if self.warehouse[x][y] == 0:
+                    objectiveFunctionValue += 1
+                elif self.warehouse[x][y] > 1:
+                    objectiveFunctionValue += (self.warehouse[x][y] - 1) * self.OVERLAPPING_PENALTY
 
         for item in self.individuals:
             if item.isFullyInBounds == False:
-                objectiveFunctionValue += 20
+                objectiveFunctionValue += self.OUT_OF_BOUNDS_PENALTY
 
             if item.isThereAPath == False:
-                objectiveFunctionValue += 50
+                objectiveFunctionValue += self.NO_PATH_PENALTY
 
     def putCargosIntoWarehouse(self):
         for item in self.individuals:
