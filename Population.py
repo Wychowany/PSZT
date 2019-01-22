@@ -25,19 +25,19 @@ class Population:
         Penalty value: 50 if there is no path to the item
     '''
     def evaluateObjectiveFunction(self, height, width):
-        objectiveFunctionValue = 0
+        self.objectiveFunctionValue = 0
 
         for y in range(width):
             for x in range(height):
                 if self.warehouse[x][y] >= 0:
-                    objectiveFunctionValue += (self.warehouse[x][y] - 1) * 5 + 1
+                    self.objectiveFunctionValue += (self.warehouse[x][y] - 1) * 5 + 1
 
         for item in self.individuals:
             if item.isFullyInBounds(self.warehouse,height,width) == False:
-                objectiveFunctionValue += 20
+                self.objectiveFunctionValue += 20
 
-            if item.isThereAPath(self.warehouse)== False:
-                objectiveFunctionValue += 50
+            #if item.isThereAPath(self.warehouse)== False:
+                #self.objectiveFunctionValue += 50
 
     def putCargosIntoWarehouse(self):
         for item in self.individuals:

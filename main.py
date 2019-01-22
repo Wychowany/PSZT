@@ -25,6 +25,7 @@ class Main:
     current_position = None
     data_sample = None #tablica populacji
     input_vector = None
+    NUMBER_OF_ITERATIONS = 100
 
     def __init__(self):
         self.turtleWrapper = turtleWrap.TurtleWrapper()
@@ -68,8 +69,9 @@ class Main:
     def iteration(self):
         for population in self.data_sample:
             population.evaluateObjectiveFunction(self.warehouse.HEIGHT, self.warehouse.WIDTH)
-
+        print("Po liczeniu funkcji przystosowania")
         self.sort()
+        print("po sortowaniu")
 
         for i in range(50):
             a = random.randrange(0, 50, 1)
@@ -77,19 +79,23 @@ class Main:
             while a == b:
                 b = random.randrange(0, 50, 1)
 
-            for j in range(50):
-                self.data_sample.append(self.crossPopulations(self.data_sample[a], self.data_sample[b]))
-
+            #for j in range(50):
+            self.data_sample.append(self.crossPopulations(self.data_sample[a], self.data_sample[b]))
+        print("po krzyżowaniu")
         for population in self.data_sample:
             for cargo in population.individuals:
                 cargo.mutate()
 
             population.warehouse = copy.deepcopy(self.warehouse.matrix)
             population.putCargosIntoWarehouse()
+        print("po mutacji")
+        #self.print_warehouse()
 
+    def run_iteration(self):
+        for i in range(self.NUMBER_OF_ITERATIONS):
+            self.iteration()
+            print(i)
         self.print_warehouse()
-
-
 
     def print_warehouse(self):
         self.data_sample[0].debug_warehouse_shape()
@@ -162,9 +168,9 @@ class Main:
         new_sample = []
         # 50 best populations
         for i in range(50):
-            key = value_map[self.keyWithMinValue(value_map)]
+            key = self.keyWithMinValue(value_map)
             new_sample.append(self.data_sample[key])
-            self.data_sample.pop(key)
+            value_map.pop(key)
         
         self.data_sample = new_sample
 
@@ -183,7 +189,7 @@ class Main:
         self.screen.onkey(self.right_pressed, "Right")
         self.screen.onkey(self.finish_drawing, "k")
         self.screen.onkey(self.start_test_rysowania_cargo, "a")
-        self.screen.onkey(self.iteration, "i")
+        self.screen.onkey(self.run_iteration, "i")
         self.screen.onkey(self.print_warehouse, "w")
         #self.screen.onkey(self.reproduce, "space")
         self.screen.listen()
